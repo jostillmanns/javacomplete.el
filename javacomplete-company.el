@@ -23,9 +23,22 @@
     (c-beginning-of-statement-1)
     (point)))
 
+(defun javacomplete-inside-for ()
+  (or (save-excursion
+	(c-beginning-of-statement 1)
+	(c-beginning-of-statement 1)
+	(looking-at "for"))
+      (save-excursion
+	(c-beginning-of-statement 1)
+	(c-beginning-of-statement 1)
+	(c-beginning-of-statement 1)
+	(looking-at "for"))))
+
 (defun javacomplete--begin-of-outer-statement ()
   "reads through parentheses"
-  (c-beginning-of-statement 1))
+  (if (not (javacomplete-inside-for))
+      (c-beginning-of-statement 1)
+    (search-backward "for")))
 
 (defun javacomplete--begin-of-outer-statement-p ()
   ""
