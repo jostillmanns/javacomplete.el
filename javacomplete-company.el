@@ -152,6 +152,7 @@
 
 (defun javacomplete-add-import ()
   "replace word at point with the fully qualified class name"
+  (interactive)
   (let ((request (list
 		  :file (buffer-file-name)
 		  :expression (thing-at-point 'word)
