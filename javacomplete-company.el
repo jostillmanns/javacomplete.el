@@ -183,7 +183,7 @@
       ((request (json-encode (javacomplete--create-request type-prefix prefix api)))
        (process (javacomplete--create-process)))
     (process-send-string process request)
-    (accept-process-output process 1)))
+    (accept-process-output process 0 100)))
 
 (defun company-javacomplete (command &optional arg &rest ignored)
   (interactive (list 'interactive))
