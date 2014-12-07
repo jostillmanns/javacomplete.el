@@ -150,6 +150,27 @@
    :buffer (s-concat (buffer-substring-no-properties (point-min) (javacomplete--begin-of-outer-statement-p))
 		     (buffer-substring-no-properties (javacomplete--end-of-outer-statement-p) (point-max)))))
 
+(defun javacomplete-add-import ()
+  "replace word at point with the fully qualified class name"
+  (let ((request (list
+		  :file (buffer-file-name)
+		  :expression (thing-at-point 'word)
+		  :prefix "foo"
+		  :apicall "addimport"
+		  :line 0
+		  :buffer "foo"))
+	(process (javacomplete--create-process)))
+    (javacomplete--clear-buffer)
+    (process-send-string process (json-encode request))
+    (accept-process-output process 1)
+    
+    (let ((import (javacomplete--raw-candidates))
+	  (point-at-bow (save-excursion (backward-word)(point)))
+	  (point-at-eow (save-excursion (forward-word) (point))))
+      (when (not(eq nil import))
+	(delete-region point-at-bow point-at-eow)
+	  (insert (car import))))))
+
 (defun javacomplete-clean-imports ()
   ""
   (let ((request (json-encode (javacomplete--create-request "" "" "cleanimports")))
