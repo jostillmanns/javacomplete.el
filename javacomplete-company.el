@@ -24,15 +24,8 @@
     (point)))
 
 (defun javacomplete-inside-for ()
-  (or (save-excursion
-	(c-beginning-of-statement 1)
-	(c-beginning-of-statement 1)
-	(looking-at "for"))
-      (save-excursion
-	(c-beginning-of-statement 1)
-	(c-beginning-of-statement 1)
-	(c-beginning-of-statement 1)
-	(looking-at "for"))))
+  (or (looking-back "for[ ]*([^;{}]*;[^;{}]*")
+      (looking-back "for[ ]*([^;{}]*;[^;{}]*;[^;{}]*")))
 
 (defun javacomplete--begin-of-outer-statement ()
   "reads through parentheses"
