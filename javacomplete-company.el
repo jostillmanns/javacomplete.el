@@ -156,14 +156,37 @@
 	(process (javacomplete--create-process)))
     (javacomplete--clear-buffer)
     (process-send-string process (json-encode request))
-    (accept-process-output process 1)
-    
-    (let ((import (javacomplete--raw-candidates))
-	  (point-at-bow (save-excursion (backward-word)(point)))
-	  (point-at-eow (save-excursion (forward-word) (point))))
-      (when (not(eq nil import))
-	(delete-region point-at-bow point-at-eow)
-	  (insert (car import))))))
+    (accept-process-output process 1))
+
+    (when (not (eq nil (javacomplete--raw-candidates)))
+      (let ((import (progn (if (eq 1 (length (javacomplete--raw-candidates)))
+			       (car (javacomplete--raw-candidates))
+			     (ido-completing-read "select import" (javacomplete--raw-candidates)))))
+		    (point-at-bow (save-excursion (backward-word)(point)))
+		    (point-at-eow (save-excursion (forward-word) (point))))
+      (delete-region point-at-bow point-at-eow)
+      (insert import))))
+
+(defun javacomplete-definition()
+  "get definition vor method at point"
+  (let ((request (list
+		  :file (buffer-file-name)
+		  :expression (buffer-substring (javacomplete--begin-statement) (progn (c-end-of-statement) (point)))
+		  :prefix ""
+		  :apicall "definition"
+		  :line 0
+		  :buffer (buffer-substring-no-properties (point-min) (point-max))))
+	(process (javacomplete--create-process)))
+    (javacomplete--clear-buffer)
+    (process-send-string process (json-encode request))
+    (accept-process-output process 1))
+
+  (let ((definition (javacomplete--read-candidates)))
+    (when (not (eq nil definition))
+      (message (format "%s %s%s"
+		       (get-text-property 0 'type (car definition))
+		       (substring-no-properties (car definition))
+		       (get-text-property 0 'parameters (car definition)))))))
 
 (defun javacomplete-clean-imports ()
   ""
