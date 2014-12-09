@@ -1,5 +1,6 @@
 (require 's)
 (require 'json)
+(require 'ido)
 
 (defun javacomplete--clear-buffer()
   "clear completion buffer"
