@@ -81,7 +81,7 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
 	(els (javacomplete--raw-candidates))
 	(res '()))
     (dolist (el els res)
-      (add-to-list 'res (nth 0 (s-split "!" el)))
+      (add-to-ordered-list 'res (nth 0 (s-split "!" el)))
       (add-text-properties
        0
        (- (length (car res)) 1)
