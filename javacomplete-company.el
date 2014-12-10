@@ -192,12 +192,16 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
     (process-send-string process (json-encode request))
     (accept-process-output process 1))
 
-  (let ((definition (javacomplete--read-candidates)))
+  (let ((definition (javacomplete--read-candidates))
+	(res ""))
     (when (not (eq nil definition))
-      (message (format "%s %s%s"
-		       (get-text-property 0 'type (car definition))
-		       (substring-no-properties (car definition))
-		       (get-text-property 0 'parameters (car definition)))))))
+      (dolist (d definition res)
+	(set 'res (s-append res (format "%s %s%s\n"
+			 (get-text-property 0 'type d)
+			 (substring-no-properties d)
+			 (get-text-property 0 'parameters d)))))
+      (message res))))
+
 
 (defun javacomplete-clean-imports ()
   ""
