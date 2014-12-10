@@ -2,6 +2,12 @@
 (require 'json)
 (require 'ido)
 
+(defcustom javacomplete-begin-after-member-access t
+  "When non-nil, automatic completion will start whenever the current
+symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
+  :group 'javacomplete
+  :type 'boolean)
+
 (defun javacomplete--clear-buffer()
   "clear completion buffer"
   (when (get-buffer "*JAVA COMPLETION*")
@@ -195,6 +201,11 @@
 	(process (javacomplete--create-process)))
     (process-send-string process request)))
 
+(defun javacomplete--prefix ()
+  (if javacomplete-begin-after-member-access
+      (company-grab-symbol-cons "\\." 1)
+    (company-grab-symbol)))
+
 (defun javacomplete--call-process-socket (type-prefix prefix api)
   "write on javacomplete socket"
   (let
@@ -208,7 +219,7 @@
   (case command
     (interactive (company-begin-backend 'company-javacomplete))
     (prefix (and (derived-mode-p 'java-mode 'jde-mode)
-		 (or (company-grab-symbol) 'stop)))
+		 (or (javacomplete--prefix) 'stop)))
     (candidates (javacomplete--candidates arg))
     (meta (format "%s" arg))
     (annotation (format "%s - %s" (get-text-property 0 'parameters arg) (get-text-property 0 'type arg)))))
