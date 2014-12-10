@@ -175,7 +175,7 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
       (insert import))))
 
 (defun javacomplete-signature()
-  "get signatur for  method at point"
+  "get signatur for word at point"
   (interactive)
   (let ((request (list
 		  :file (buffer-file-name)
