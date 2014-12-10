@@ -185,7 +185,7 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
 				(s-chop-suffix (thing-at-point 'word) (javacomplete--grab-symbol)))
 		  :prefix (thing-at-point 'word)
 		  :apicall "definition"
-		  :line 0
+		  :line (javacomplete--current-line)
 		  :buffer (buffer-substring-no-properties (point-min) (point-max))))
 	(process (javacomplete--create-process)))
     (javacomplete--clear-buffer)
