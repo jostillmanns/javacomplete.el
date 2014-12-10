@@ -174,12 +174,16 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
       (delete-region point-at-bow point-at-eow)
       (insert import))))
 
-(defun javacomplete-definition()
-  "get definition vor method at point"
+(defun javacomplete-signature()
+  "get signatur for  method at point"
+  (interactive)
   (let ((request (list
 		  :file (buffer-file-name)
-		  :expression (buffer-substring (javacomplete--begin-statement) (progn (c-end-of-statement) (point)))
-		  :prefix ""
+		  :expression (save-excursion
+				(when (eq nil (looking-at "\\>"))
+				  (forward-word))
+				(s-chop-suffix (thing-at-point 'word) (javacomplete--grab-symbol)))
+		  :prefix (thing-at-point 'word)
 		  :apicall "definition"
 		  :line 0
 		  :buffer (buffer-substring-no-properties (point-min) (point-max))))
