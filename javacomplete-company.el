@@ -58,7 +58,7 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
 (defun javacomplete--end-of-outer-statement-p ()
   (save-excursion
     (while (looking-at ")")
-      (forward-char))    
+      (forward-char))
     (if (or (looking-at "[ \n\t]*\\(if\\|for\\|while\\|try\\|switch\\)[ ]*(")
 	    (looking-at "[ \n\t]*\\(public\\|private\\|protected\\|class\\)[ ]+")
 	    (looking-at "[ \n\t]*\\(try\\)[ ]*{"))
