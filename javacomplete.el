@@ -231,3 +231,5 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
     (candidates (javacomplete--candidates arg))
     (meta (format "%s" arg))
     (annotation (format "%s - %s" (get-text-property 0 'parameters arg) (get-text-property 0 'type arg)))))
+
+(provide 'javacomplete)
