@@ -222,6 +222,16 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
     (process-send-string process request)
     (accept-process-output process 0 100)))
 
+(defun javacomplete--annotation (arg)
+  (let ((annotation "")
+	(parameters (get-text-property 0 'parameters arg))
+	(type (get-text-property 0 'type arg)))
+    (when (not (string-equal "" parameters))
+      (setq annotation (s-append annotation parameters)))
+    (when (not (string-equal "" type))
+      (setq annotation (s-append (format " : %s" type) annotation)))
+    annotation))
+
 (defun company-javacomplete (command &optional arg &rest ignored)
   (interactive (list 'interactive))
   (case command
@@ -230,6 +240,6 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
 		 (or (javacomplete--prefix) 'stop)))
     (candidates (javacomplete--candidates arg))
     (meta (format "%s" arg))
-    (annotation (format "%s - %s" (get-text-property 0 'parameters arg) (get-text-property 0 'type arg)))))
+    (annotation (javacomplete--annotation arg))))
 
 (provide 'javacomplete)
