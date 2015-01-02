@@ -30,13 +30,13 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
     (c-beginning-of-statement-1)
     (point)))
 
-(defun javacomplete-inside-for ()
+(defun javacomplete--inside-for ()
   (or (looking-back "for[ ]*([^;{}]*;[^;{}]*")
       (looking-back "for[ ]*([^;{}]*;[^;{}]*;[^;{}]*")))
 
 (defun javacomplete--begin-of-outer-statement ()
   "reads through parentheses"
-  (if (not (javacomplete-inside-for))
+  (if (not (javacomplete--inside-for))
       (c-beginning-of-statement 1)
     (search-backward "for")))
 
