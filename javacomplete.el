@@ -135,7 +135,7 @@ symbol is preceded by a \".\", ignoring `company-minimum-prefix-length'."
   "create process"
   (make-network-process
    :name "javacomplete"
-   :service "/tmp/javacomplete.sock"
+   :service (concat (file-name-as-directory (getenv "TMPDIR")) "javacomplete.sock")
    :family 'local
    :buffer "*JAVA COMPLETION*"))
 
